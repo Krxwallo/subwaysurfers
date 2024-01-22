@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "subwaysurfers",
+  "version": "${version}",
+  "name": "SubwaySurfers",
+  "description": "Subway Surfers in Minecraft",
+  "authors": [
+    "NoRiskk"
+  ],
+  "contact": {
+    "homepage": "https://github.com/copyandexecute/subwaysurfers",
+    "sources": "https://github.com/copyandexecute/subwaysurfers"
+  },
+  "license": "MIT",
+  "icon": "assets/subwaysurfers/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "gg.norisk.subwaysurfers.SubwaySurfers"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "gg.norisk.subwaysurfers.SubwaySurfers"
+      }
+    ]
+  },
+  "accessWidener": "subwaysurfers.accesswidener",
+  "mixins": [
+    "subwaysurfers.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": "*",
+    "java": ">=17",
+    "fabric-language-kotlin": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
