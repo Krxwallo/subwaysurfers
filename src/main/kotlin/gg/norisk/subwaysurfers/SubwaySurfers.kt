@@ -10,6 +10,7 @@ import gg.norisk.subwaysurfers.registry.*
 import gg.norisk.subwaysurfers.server.command.StartCommand
 import gg.norisk.subwaysurfers.server.listener.MovementInputListener
 import gg.norisk.subwaysurfers.server.listener.ScreenListener
+import gg.norisk.subwaysurfers.server.mechanics.SpeedManager
 import gg.norisk.subwaysurfers.worldgen.RailWorldManager
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
@@ -28,6 +29,7 @@ object SubwaySurfers : ModInitializer, ClientModInitializer {
         RailWorldManager.init()
         StartCommand.init()
         MovementInputListener.init()
+        SpeedManager.init()
     }
 
     override fun onInitializeClient() {

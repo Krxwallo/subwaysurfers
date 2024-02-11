@@ -5,6 +5,7 @@ import gg.norisk.subwaysurfers.entity.UUIDMarker
 import gg.norisk.subwaysurfers.network.s2c.VisualClientSettings
 import gg.norisk.subwaysurfers.network.s2c.gameOverScreenS2C
 import gg.norisk.subwaysurfers.network.s2c.visualClientSettingsS2C
+import gg.norisk.subwaysurfers.server.mechanics.SpeedManager
 import gg.norisk.subwaysurfers.subwaysurfers.*
 import gg.norisk.subwaysurfers.worldgen.RailWorldManager
 import net.minecraft.entity.attribute.EntityAttributes
@@ -89,9 +90,9 @@ object StartCommand {
             player.isSubwaySurfers = true
             player.coins = 0
             player.punishTicks = 0
-            player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = 0.4
+            player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = SpeedManager.SURFER_BASE_SPEED
         } else {
-            player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = 0.1
+            player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = SpeedManager.vanillaSpeed
             player.isSubwaySurfers = false
         }
 
