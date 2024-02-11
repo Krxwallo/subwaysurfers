@@ -4,7 +4,6 @@ import gg.norisk.subwaysurfers.entity.TrainEntity
 import gg.norisk.subwaysurfers.network.c2s.MovementType
 import gg.norisk.subwaysurfers.network.c2s.movementTypePacket
 import gg.norisk.subwaysurfers.network.s2c.AnimationPacket
-import gg.norisk.subwaysurfers.network.s2c.gameOverScreenS2C
 import gg.norisk.subwaysurfers.network.s2c.playAnimationS2C
 import gg.norisk.subwaysurfers.registry.SoundRegistry
 import gg.norisk.subwaysurfers.server.command.StartCommand
@@ -25,12 +24,30 @@ object MovementInputListener {
     //fade hinzufügen
     //dash spekatulärer machen
 
+    /** Punish player for dashing against train or wall */
+    private fun ServerPlayerEntity.punishHit() {
+        world.playSoundFromEntity(
+            null,
+            this,
+            SoundEvents.ENTITY_PLAYER_HURT,
+            SoundCategory.PLAYERS,
+            0.4f,
+            0.8f
+        )
+        punishTicks += 20 * 3
+        checkGameOver()
+    }
+
     fun init() {
+
         movementTypePacket.receiveOnServer { packet, context ->
             val player = context.player
 
             if (packet == MovementType.SLIDE) {
                 playAnimationS2C.sendToAll(AnimationPacket(player.uuid, "subway_jump"))
+
+                // add downward velocity to player
+                player.modifyVelocity(Vec3d(0.0, -1.0, 0.0))
 
                 player.surfer.isSliding = true
                 mcCoroutineTask(delay = 3.seconds) {
@@ -50,9 +67,11 @@ object MovementInputListener {
                     Vec3d(0.0, player.jumpStrength, 0.0)
                 )
             } else if (player.rail == 0 && packet == MovementType.LEFT) {
-                //TODO ERROR SOUND
+                // Krxwallo - Also punish player when they try to dash against a wall
+                // ist im echten Subway Surfers auch so lg
+                player.punishHit()
             } else if (player.rail == 2 && packet == MovementType.RIGHT) {
-                //TODO ERROR SOUND
+                player.punishHit()
             } else {
                 playAnimationS2C.sendToAll(AnimationPacket(player.uuid, "subway_dash"))
 
@@ -65,16 +84,8 @@ object MovementInputListener {
 
                 //Teleportation is better than modifying the velocity right=?
                 if (player.punishDash(newPos)) {
-                    (player.world.playSoundFromEntity(
-                        null,
-                        player,
-                        SoundEvents.ENTITY_PLAYER_HURT,
-                        SoundCategory.PLAYERS,
-                        0.4f,
-                        0.8f
-                    ))
-                    player.punishTicks += 20 * 3
-                    player.handelGameOver()
+                    // player hit train
+                    player.punishHit()
                 } else {
                     (player.world.playSoundFromEntity(
                         null,
@@ -100,7 +111,8 @@ object MovementInputListener {
         }
     }
 
-    private fun ServerPlayerEntity.handelGameOver() {
+    /** check for potential loss, depending on current punish ticks */
+    private fun ServerPlayerEntity.checkGameOver() {
         if (punishTicks > 70) {
             StartCommand.handleGameStop(this)
         }
