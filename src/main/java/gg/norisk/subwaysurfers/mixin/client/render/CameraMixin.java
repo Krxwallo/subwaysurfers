@@ -26,8 +26,6 @@ public abstract class CameraMixin {
 
     @Unique
     private double currentCameraX;
-    @Shadow
-    private Entity focusedEntity;
 
     @ModifyConstant(method = "update", constant = @Constant(doubleValue = 4.0))
     private double subwaySurfersIncreaseCameraDistance(double constant) {
@@ -43,15 +41,10 @@ public abstract class CameraMixin {
             // - offset camera up and forward
             // --- X ---
             currentCameraX = lerp(f * visualSettings.getCameraSpeedX(), currentCameraX, player.getX());
-            System.out.println("currentCameraX: " + currentCameraX);
             // --- Y ---
-            /*var y = lerp(f * visualSettings.getCameraSpeed(), entity.prevY + visualSettings.getCameraOffsetY(), entity.getY() + 1.0)
-                    + lerp(f*//* * visualSettings.getCameraSpeed()*//*, this.lastCameraY, this.cameraY);*/
             cameraY = (float) lerp(f * visualSettings.getCameraSpeedY(), lastCameraY, entity.getY() + visualSettings.getCameraOffsetY());
-            System.out.println("y: " + cameraY);
             // --- Z ---
             var z = lerp(f, entity.prevZ + visualSettings.getCameraOffsetZ(), entity.getZ() + visualSettings.getCameraOffsetZ());
-            System.out.println("z: " + z);
             // ---------
             args.setAll(currentCameraX, (double) cameraY, z);
         }
