@@ -32,7 +32,7 @@ public abstract class PlayerEntityRendererMixin extends LivingEntityRenderer<Abs
         if (SubwaySurferKt.getPunishTicks(abstractClientPlayerEntity) > 0) {
             usePoliceSkin = true;
             matrixStack.push();
-            matrixStack.translate(0, 0, -3 + punishTicks / 80f);
+            matrixStack.translate(0, 0, -2 + punishTicks / 50f);
             super.render(abstractClientPlayerEntity, f, g, matrixStack, vertexConsumerProvider, i);
             matrixStack.pop();
         }

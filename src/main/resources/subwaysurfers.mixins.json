@@ -17,6 +17,7 @@
     "client.network.ClientPlayerEntityMixin",
     "client.option.GameOptionsMixin",
     "client.render.CameraMixin",
+    "client.render.GameRendererMixin",
     "client.render.WorldRendererMixin",
     "client.render.entity.PlayerEntityRendererMixin"
   ],

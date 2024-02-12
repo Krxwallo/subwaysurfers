@@ -36,11 +36,24 @@ public abstract class CameraMixin {
 
     @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;setPos(DDD)V"))
     private void setPosInjection(Args args, BlockView blockView, Entity entity, boolean bl, boolean bl2, float f) {
-        if (ClientSettings.INSTANCE.isEnabled() && ClientSettings.INSTANCE.getStartPos() != null && entity instanceof PlayerEntity player) {
-            currentCameraX = lerp(f * 0.05, currentCameraX, player.getX());
-            var y = lerp(f, entity.prevY, entity.getY()) + (double) lerp(f, this.lastCameraY, this.cameraY);
-            var z = lerp(f, entity.prevZ, entity.getZ());
-            args.setAll(currentCameraX, y, z);
+        var settings = ClientSettings.INSTANCE;
+        if (settings.isEnabled() && settings.getStartPos() != null && entity instanceof PlayerEntity player) {
+            var visualSettings = settings.getSettings();
+            // - interpolate x and y coordinates
+            // - offset camera up and forward
+            // --- X ---
+            currentCameraX = lerp(f * visualSettings.getCameraSpeedX(), currentCameraX, player.getX());
+            System.out.println("currentCameraX: " + currentCameraX);
+            // --- Y ---
+            /*var y = lerp(f * visualSettings.getCameraSpeed(), entity.prevY + visualSettings.getCameraOffsetY(), entity.getY() + 1.0)
+                    + lerp(f*//* * visualSettings.getCameraSpeed()*//*, this.lastCameraY, this.cameraY);*/
+            cameraY = (float) lerp(f * visualSettings.getCameraSpeedY(), lastCameraY, entity.getY() + visualSettings.getCameraOffsetY());
+            System.out.println("y: " + cameraY);
+            // --- Z ---
+            var z = lerp(f, entity.prevZ + visualSettings.getCameraOffsetZ(), entity.getZ() + visualSettings.getCameraOffsetZ());
+            System.out.println("z: " + z);
+            // ---------
+            args.setAll(currentCameraX, (double) cameraY, z);
         }
     }
 
