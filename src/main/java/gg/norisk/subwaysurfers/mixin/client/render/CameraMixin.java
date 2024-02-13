@@ -6,26 +6,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import static net.minecraft.util.math.MathHelper.lerp;
 
 @Mixin(Camera.class)
 public abstract class CameraMixin {
-    @Shadow
-    private float cameraY;
-
-    @Shadow
-    private float lastCameraY;
+    @Unique
+    private double customX;
 
     @Unique
-    private double currentCameraX;
+    private double lastCustomY;
+
+    @Unique
+    private double customY;
 
     @ModifyConstant(method = "update", constant = @Constant(doubleValue = 4.0))
     private double subwaySurfersIncreaseCameraDistance(double constant) {
@@ -39,14 +36,11 @@ public abstract class CameraMixin {
             var visualSettings = settings.getSettings();
             // - interpolate x and y coordinates
             // - offset camera up and forward
-            // --- X ---
-            currentCameraX = lerp(f * visualSettings.getCameraSpeedX(), currentCameraX, player.getX());
-            // --- Y ---
-            cameraY = (float) lerp(f * visualSettings.getCameraSpeedY(), lastCameraY, entity.getY() + visualSettings.getCameraOffsetY());
-            // --- Z ---
-            var z = lerp(f, entity.prevZ + visualSettings.getCameraOffsetZ(), entity.getZ() + visualSettings.getCameraOffsetZ());
-            // ---------
-            args.setAll(currentCameraX, (double) cameraY, z);
+            customX = lerp(f * visualSettings.getCameraSpeedX(), customX, player.getX());
+            customY = lerp(f * visualSettings.getCameraSpeedY(), lastCustomY, entity.getY() + visualSettings.getCameraOffsetY());
+            double customZ = lerp(f, entity.prevZ + visualSettings.getCameraOffsetZ(), entity.getZ() + visualSettings.getCameraOffsetZ());
+
+            args.setAll(customX, customY, customZ);
         }
     }
 
@@ -55,6 +49,13 @@ public abstract class CameraMixin {
         if (ClientSettings.INSTANCE.isEnabled()) {
             args.set(0, ClientSettings.INSTANCE.getSettings().getYaw());
             args.set(1, ClientSettings.INSTANCE.getSettings().getPitch());
+        }
+    }
+
+    @Inject(method = "updateEyeHeight", at = @At("HEAD"))
+    private void updateCustomY(CallbackInfo ci) {
+        if (ClientSettings.INSTANCE.isEnabled() && ClientSettings.INSTANCE.getStartPos() != null) {
+            lastCustomY = customY;
         }
     }
 }
