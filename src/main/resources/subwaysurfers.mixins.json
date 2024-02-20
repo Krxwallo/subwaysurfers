@@ -6,7 +6,8 @@
   "mixins": [
     "entity.EntityDimensionsMixin",
     "entity.LivingEntityMixin",
-    "entity.player.PlayerEntityMixin"
+    "entity.player.PlayerEntityMixin",
+    "structure.StructureTemplateMixin"
   ],
   "client": [
     "client.IrisMixin",

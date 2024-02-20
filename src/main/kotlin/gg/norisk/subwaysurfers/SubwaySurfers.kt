@@ -12,6 +12,7 @@ import gg.norisk.subwaysurfers.server.listener.MovementInputListener
 import gg.norisk.subwaysurfers.server.listener.ScreenListener
 import gg.norisk.subwaysurfers.server.mechanics.SpeedManager
 import gg.norisk.subwaysurfers.worldgen.RailWorldManager
+import gg.norisk.subwaysurfers.worldgen.StructureManager
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
@@ -41,6 +42,7 @@ object SubwaySurfers : ModInitializer, ClientModInitializer {
         GameOverListener.init()
         ScreenListener.init()
         ShaderManager.init()
+        StructureManager.initClient()
         devCommands()
     }
 
