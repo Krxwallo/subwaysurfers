@@ -28,7 +28,6 @@ object SubwaySurfers : ModInitializer, ClientModInitializer {
         SoundRegistry.init()
         BlockRegistry.init()
         ItemRegistry.init()
-        EntityRendererRegistry.init()
         RailWorldManager.init()
         StartCommand.init()
         MovementInputListener.init()
@@ -38,6 +37,7 @@ object SubwaySurfers : ModInitializer, ClientModInitializer {
     }
 
     override fun onInitializeClient() {
+        EntityRendererRegistry.init()
         ClientSettings.init()
         KeyboardInput.init()
         InGameHud.init()
