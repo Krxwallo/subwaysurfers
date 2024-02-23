@@ -23,14 +23,6 @@ val isEnabled: Boolean
 
 //TODO leftPattern, rightPattern, trackPattern
 
-var PlayerEntity.currentLeftPattern: List<String>
-    get() {
-        return this.dataTracker.get(leftPatternTracker)
-    }
-    set(value) {
-        this.dataTracker.set(leftPatternTracker, value)
-    }
-
 var PlayerEntity.punishTicks: Int
     get() {
         return this.dataTracker.get(punishTicksTracker)
@@ -157,8 +149,5 @@ val subwaySurfersTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
 val magnetTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
-val leftPatternTracker =
-    DataTracker.registerData(PlayerEntity::class.java, NetworkRegistry.STRING_LIST)
-
 
 val PlayerEntity.surfer get() = this as SubwaySurfer

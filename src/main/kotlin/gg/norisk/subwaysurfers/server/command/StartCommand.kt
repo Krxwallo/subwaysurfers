@@ -22,7 +22,6 @@ object StartCommand {
         command("subwaysurfers") {
             literal("pattern") {
                 runs {
-                    this.source.playerOrThrow.currentLeftPattern = leftWallPattern
                 }
             }
             literal("magnet") {
