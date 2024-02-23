@@ -11,6 +11,8 @@ import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.option.Perspective
 import net.minecraft.util.math.Vec3d
 
+//TODO 2 Neue Blöcke (Absperrband und So drunter Rutschen)
+
 object ClientSettings : ClientTickEvents.EndTick {
     var settings = VisualClientSettings()
     var startPos: Vec3d? = null
