@@ -24,7 +24,8 @@ import software.bernie.geckolib.util.GeckoLibUtil
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
-class MagnetEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEntity(type, level), GeoEntity, UUIDMarker {
+class MagnetEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEntity(type, level), GeoEntity,
+    UUIDMarker {
     private val cache: AnimatableInstanceCache = GeckoLibUtil.createInstanceCache(this)
     override var owner: UUID? = null
 
@@ -49,9 +50,7 @@ class MagnetEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnt
 
     override fun tick() {
         super.tick()
-        if (!world.isClient) {
-            handleDiscard(owner)
-        }
+        handleDiscard(owner)
     }
 
     override fun onPlayerCollision(player: PlayerEntity) {

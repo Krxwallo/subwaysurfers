@@ -33,9 +33,7 @@ class CoinEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEntit
 
     override fun tick() {
         super.tick()
-        if (!world.isClient) {
-            handleDiscard(owner)
-        }
+        handleDiscard(owner)
     }
 
     override fun pushAwayFrom(entity: Entity?) {

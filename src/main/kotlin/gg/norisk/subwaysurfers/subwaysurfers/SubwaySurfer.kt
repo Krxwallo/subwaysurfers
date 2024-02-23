@@ -1,6 +1,7 @@
 package gg.norisk.subwaysurfers.subwaysurfers
 
 import gg.norisk.subwaysurfers.entity.CoinEntity
+import gg.norisk.subwaysurfers.registry.NetworkRegistry
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
@@ -18,6 +19,16 @@ interface SubwaySurfer {
 val isEnabled: Boolean
     get() {
         return MinecraftClient.getInstance().player?.isSubwaySurfers == true
+    }
+
+//TODO leftPattern, rightPattern, trackPattern
+
+var PlayerEntity.currentLeftPattern: List<String>
+    get() {
+        return this.dataTracker.get(leftPatternTracker)
+    }
+    set(value) {
+        this.dataTracker.set(leftPatternTracker, value)
     }
 
 var PlayerEntity.punishTicks: Int
@@ -67,6 +78,20 @@ var PlayerEntity.rail: Int
     set(value) {
         this.dataTracker.set(railDataTracker, MathHelper.clamp(value, 0, 2))
     }
+
+var PlayerEntity.lastPatternUpdatePos: Int
+    get() {
+        return this.dataTracker.get(lastPatternUpdatePosTracker)
+    }
+    set(value) {
+        this.dataTracker.set(lastPatternUpdatePosTracker, value)
+    }
+
+val PlayerEntity.isSubwaySurfersOrSpectator: Boolean
+    get() {
+        return this.dataTracker.get(subwaySurfersTracker) or false
+    }
+
 
 var PlayerEntity.isSubwaySurfers: Boolean
     get() {
@@ -122,6 +147,8 @@ val jumpStrengthTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.FLOAT)
 val railDataTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.INTEGER)
+val lastPatternUpdatePosTracker =
+    DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.INTEGER)
 val multiplierTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.INTEGER)
 val punishTicksTracker =
@@ -130,5 +157,8 @@ val subwaySurfersTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
 val magnetTracker =
     DataTracker.registerData(PlayerEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
+val leftPatternTracker =
+    DataTracker.registerData(PlayerEntity::class.java, NetworkRegistry.STRING_LIST)
+
 
 val PlayerEntity.surfer get() = this as SubwaySurfer

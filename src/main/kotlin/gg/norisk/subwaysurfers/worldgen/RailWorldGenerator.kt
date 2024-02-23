@@ -1,5 +1,6 @@
 package gg.norisk.subwaysurfers.worldgen
 
+import gg.norisk.subwaysurfers.extensions.toAxisPos
 import gg.norisk.subwaysurfers.registry.BlockRegistry
 import gg.norisk.subwaysurfers.registry.EntityRegistry
 import net.minecraft.block.Blocks
@@ -36,11 +37,6 @@ class RailWorldGenerator(
         generateRailsForPlayer(player, world)
     }
 
-    private fun BlockPos.toAxisPos(direction: Direction): BlockPos {
-        return BlockPos(
-            x * direction.offsetX, y * direction.offsetY, z * direction.offsetZ
-        )
-    }
 
     private fun fillTrainList(maxDistance: Int) {
         repeat(3) { row ->

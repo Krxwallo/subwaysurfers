@@ -2,6 +2,7 @@ package gg.norisk.subwaysurfers.mixin.entity.player;
 
 import gg.norisk.subwaysurfers.subwaysurfers.SubwaySurfer;
 import gg.norisk.subwaysurfers.subwaysurfers.SubwaySurferKt;
+import kotlin.collections.EmptyList;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import org.apache.commons.compress.utils.Lists;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -104,10 +106,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements SubwaySu
         this.dataTracker.startTracking(SubwaySurferKt.getMultiplierTracker(), 1);
         this.dataTracker.startTracking(SubwaySurferKt.getJumpStrengthTracker(), 1.8f);
         this.dataTracker.startTracking(SubwaySurferKt.getRailDataTracker(), 1);
+        this.dataTracker.startTracking(SubwaySurferKt.getLastPatternUpdatePosTracker(), 0);
         this.dataTracker.startTracking(SubwaySurferKt.getPunishTicksTracker(), 0);
         this.dataTracker.startTracking(SubwaySurferKt.getCoinDataTracker(), 0);
         this.dataTracker.startTracking(SubwaySurferKt.getSubwaySurfersTracker(), false);
         this.dataTracker.startTracking(SubwaySurferKt.getMagnetTracker(), false);
+        this.dataTracker.startTracking(SubwaySurferKt.getLeftPatternTracker(), Lists.newArrayList());
     }
 
     @Override

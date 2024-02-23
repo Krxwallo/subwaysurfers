@@ -2,12 +2,11 @@ package gg.norisk.subwaysurfers.server.command
 
 import com.mojang.brigadier.context.CommandContext
 import gg.norisk.subwaysurfers.entity.UUIDMarker
-import gg.norisk.subwaysurfers.network.s2c.VisualClientSettings
-import gg.norisk.subwaysurfers.network.s2c.gameOverScreenS2C
-import gg.norisk.subwaysurfers.network.s2c.visualClientSettingsS2C
+import gg.norisk.subwaysurfers.network.s2c.*
 import gg.norisk.subwaysurfers.server.mechanics.SpeedManager
 import gg.norisk.subwaysurfers.subwaysurfers.*
 import gg.norisk.subwaysurfers.worldgen.RailWorldManager
+import gg.norisk.subwaysurfers.worldgen.pattern.leftWallPattern
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -21,6 +20,11 @@ import kotlin.math.roundToInt
 object StartCommand {
     fun init() {
         command("subwaysurfers") {
+            literal("pattern") {
+                runs {
+                    this.source.playerOrThrow.currentLeftPattern = leftWallPattern
+                }
+            }
             literal("magnet") {
                 runs {
                     this.source.playerOrThrow.isMagnetic = !this.source.playerOrThrow.isMagnetic
@@ -86,11 +90,17 @@ object StartCommand {
                 centerPos.x.roundToInt(),
                 centerPos.z.roundToInt()
             )
+
+            settings.patternPacket = PatternPacket(
+                leftWallPattern, emptyList(), leftWallPattern
+            )
+
             player.teleport(player.serverWorld, centerPos.x, topY.toDouble(), centerPos.z, 0f, 0f)
             player.isSubwaySurfers = true
             player.coins = 0
             player.punishTicks = 0
-            player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = SpeedManager.SURFER_BASE_SPEED
+            player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue =
+                SpeedManager.SURFER_BASE_SPEED
         } else {
             player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)?.baseValue = SpeedManager.vanillaSpeed
             player.isSubwaySurfers = false
@@ -101,7 +111,7 @@ object StartCommand {
         player.rail = 1
 
         mcCoroutineTask(delay = 1.ticks) {
-            RailWorldManager.addPlayer(player)
+            //RailWorldManager.addPlayer(player)
         }
     }
 

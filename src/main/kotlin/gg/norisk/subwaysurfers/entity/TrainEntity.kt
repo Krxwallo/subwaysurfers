@@ -12,6 +12,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.entity.passive.AnimalEntity
 import net.minecraft.entity.passive.PassiveEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
@@ -40,6 +41,21 @@ class TrainEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnti
         this.ignoreCameraFrustum = true
     }
 
+    override fun initDataTracker() {
+        super.initDataTracker()
+        this.dataTracker.startTracking(DRIVE, false)
+    }
+
+    override fun writeCustomDataToNbt(nbtCompound: NbtCompound) {
+        super.writeCustomDataToNbt(nbtCompound)
+        nbtCompound.putBoolean("shouldDrive", shouldDrive)
+    }
+
+    override fun readCustomDataFromNbt(nbtCompound: NbtCompound) {
+        super.readCustomDataFromNbt(nbtCompound)
+        shouldDrive = nbtCompound.getBoolean("shouldDrive")
+    }
+
     companion object {
         private val DRIVE: TrackedData<Boolean> =
             DataTracker.registerData(TrainEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
@@ -49,16 +65,12 @@ class TrainEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnti
             if (player == null) {
                 this.discard()
             } else {
+                //TODO 5 should be a setting
                 if (player.blockPos.z - 5 > this.blockPos.z) {
                     this.discard()
                 }
             }
         }
-    }
-
-    override fun initDataTracker() {
-        super.initDataTracker()
-        this.dataTracker.startTracking(DRIVE, false)
     }
 
     override fun collidesWith(entity: Entity): Boolean {
@@ -69,13 +81,13 @@ class TrainEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnti
     }
 
     override fun travel(pos: Vec3d) {
-        if (this.isAlive && shouldDrive) {
-            val x = 0f
-            var z = 1f
+        if (this.isAlive && shouldDrive && world.isClient) {
+            val x = 0.0
+            val z = 1.0
 
             movementSpeed = 0.3f
 
-            super.travel(Vec3d(x.toDouble(), pos.y, z.toDouble()))
+            super.travel(Vec3d(x, pos.y, z))
         }
     }
 
@@ -90,18 +102,11 @@ class TrainEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnti
 
     override fun tick() {
         super.tick()
-        if (!world.isClient) {
-            handleDiscard(owner)
-        }
+        handleDiscard(owner)
     }
 
-    override fun isLogicalSideForUpdatingMovement(): Boolean {
-        return true
-    }
-
-    override fun isCollidable(): Boolean {
-        return true
-    }
+    override fun isLogicalSideForUpdatingMovement(): Boolean = true
+    override fun isCollidable(): Boolean = true
 
     // Turn off step sounds since it's a bike
     override fun playStepSound(pos: BlockPos, block: BlockState) {}
@@ -111,11 +116,6 @@ class TrainEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnti
         controllers.add(DefaultAnimations.genericIdleController(this))
     }
 
-    override fun getAnimatableInstanceCache(): AnimatableInstanceCache {
-        return this.cache
-    }
-
-    override fun createChild(level: ServerWorld, partner: PassiveEntity): PassiveEntity? {
-        return null
-    }
+    override fun getAnimatableInstanceCache(): AnimatableInstanceCache = this.cache
+    override fun createChild(level: ServerWorld, partner: PassiveEntity): PassiveEntity? = null
 }

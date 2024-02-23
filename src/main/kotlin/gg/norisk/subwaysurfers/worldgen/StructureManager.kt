@@ -14,6 +14,7 @@ import net.minecraft.nbt.NbtIo
 import net.minecraft.registry.Registries
 import net.minecraft.structure.StructurePlacementData
 import net.minecraft.structure.StructureTemplate
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3i
 import net.silkmc.silk.commands.clientCommand
 import net.silkmc.silk.commands.player
@@ -30,35 +31,39 @@ object StructureManager {
             clientCommand("clientstructure") {
                 argument<String>("name") { templateName ->
                     runs {
-                        placeStructure(this.source.player, templateName())
+                        placeStructure(this.source.player, this.source.player.blockPos, templateName())
                     }
                 }
             }
         }
     }
 
-    private fun placeStructure(player: ClientPlayerEntity, name: String) {
+    fun placeStructure(
+        player: ClientPlayerEntity,
+        pos: BlockPos,
+        template: StructureTemplate,
+        placementData: StructurePlacementData = StructurePlacementData()
+    ) {
         val world = player.world as ClientWorld
-        val structurePlacementData = StructurePlacementData()
-            //.setMirror(BlockMirror.values().random())
-            //.setRotation(BlockRotation.values().random())
-            .setIgnoreEntities(
-                true
-            )
 
-        val template = readOrLoadTemplate(name) ?: return
         (template as ClientStructureTemplate).placeClient(
             world,
-            player.blockPos,
-            player.blockPos.add(Vec3i(0, 1, 0)),
-            structurePlacementData,
+            pos,
+            pos.add(Vec3i(0, 1, 0)),
+            placementData,
             world.random,
             2
         )
     }
 
+    fun placeStructure(player: ClientPlayerEntity, pos: BlockPos, name: String) {
+        val template = readOrLoadTemplate(name) ?: return logger.error("Error placing structure $name at $pos")
+        placeStructure(player, pos, template)
+    }
+
     @Throws(IOException::class)
-    private fun readOrLoadTemplate(name: String): StructureTemplate? {
+    fun readOrLoadTemplate(name: String?): StructureTemplate? {
+        if (name == null) return null
         val template = structureTemplates.getIfPresent(name)
 
         if (template != null) {
@@ -68,7 +73,7 @@ object StructureManager {
         var nbtCompound: NbtCompound? = null
 
         runCatching {
-            javaClass.getResourceAsStream("/structures/$name.nbt")
+            javaClass.getResourceAsStream("/structures/$name.nbt")!!
         }.onSuccess {
             nbtCompound = NbtIo.readCompressed(it)
         }.onFailure {
