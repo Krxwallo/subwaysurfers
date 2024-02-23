@@ -11,6 +11,7 @@ import net.minecraft.datafixer.Schemas
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtHelper
 import net.minecraft.nbt.NbtIo
+import net.minecraft.nbt.NbtSizeTracker
 import net.minecraft.registry.Registries
 import net.minecraft.structure.StructurePlacementData
 import net.minecraft.structure.StructureTemplate
@@ -75,7 +76,7 @@ object StructureManager {
         runCatching {
             javaClass.getResourceAsStream("/structures/$name.nbt")!!
         }.onSuccess {
-            nbtCompound = NbtIo.readCompressed(it)
+            nbtCompound = NbtIo.readCompressed(it, NbtSizeTracker.ofUnlimitedBytes())
         }.onFailure {
             logger.error("Error loading Template $name")
             it.printStackTrace()

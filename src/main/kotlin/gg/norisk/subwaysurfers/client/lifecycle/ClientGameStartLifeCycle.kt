@@ -16,7 +16,7 @@ object ClientGameStartLifeCycle: ClientTickEvents.EndWorldTick {
     var leftWallPatternGenerator: PatternGenerator? = null
     var rightWallPatternGenerator: PatternGenerator? = null
 
-    val clientGameStartEvent = Event.onlySyncImmutable<Unit>()
+    val clientGameStartEvent = Event.onlySync<Unit>()
 
     fun init() {
         clientGameStartEvent.listen { _ ->

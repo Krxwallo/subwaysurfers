@@ -24,12 +24,12 @@ public abstract class AbstractClientPlayerEntityMixin implements IAnimatedPlayer
     @Unique
     private final ModifierLayer<IAnimation> subwaysurferAnimationContainer = new ModifierLayer<>();
 
-    @Inject(method = "getSkinTexture", at = @At("RETURN"), cancellable = true)
+    /*@Inject(method = "getSkinTexture", at = @At("RETURN"), cancellable = true)
     private void noriskSkin(CallbackInfoReturnable<Identifier> cir) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             cir.setReturnValue(SubwaySurfers.INSTANCE.getNoriskSkin());
         }
-    }
+    }*/
 
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))

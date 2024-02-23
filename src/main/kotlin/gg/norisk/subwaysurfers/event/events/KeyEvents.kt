@@ -8,5 +8,5 @@ object KeyEvents {
     open class KeyEvent(val key: Int, val scanCode: Int, val client: MinecraftClient)
 
     @OptIn(ExperimentalSilkApi::class)
-    val keyPressedOnce = Event.onlySyncImmutable<KeyEvent>()
+    val keyPressedOnce = Event.onlySync<KeyEvent>()
 }

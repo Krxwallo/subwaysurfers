@@ -6,11 +6,11 @@ plugins {
     java
 }
 
-val mcVersion = "1.20.1"
-val silkVersion = "1.10.0"
+val mcVersion = "1.20.4"
+val silkVersion = "1.10.3"
 
 group = "gg.norisk"
-version = "${mcVersion}-1.0.0"
+version = "${mcVersion}-1.0.1"
 
 repositories {
     mavenCentral()
@@ -32,10 +32,10 @@ repositories {
 
 dependencies {
     minecraft("com.mojang:minecraft:$mcVersion")
-    mappings("net.fabricmc:yarn:$mcVersion+build.2")
-    modImplementation("net.fabricmc:fabric-loader:0.15.0")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.83.1+$mcVersion")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.9.5+kotlin.1.8.22")
+    mappings("net.fabricmc:yarn:$mcVersion+build.3")
+    modImplementation("net.fabricmc:fabric-loader:0.15.3")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.91.3+$mcVersion")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.10.16+kotlin.1.9.21")
 
     include(modImplementation("net.silkmc:silk-commands:$silkVersion")!!)
     include(modImplementation("net.silkmc:silk-core:$silkVersion")!!)
@@ -43,8 +43,8 @@ dependencies {
 
     modImplementation("software.bernie.geckolib:geckolib-fabric-$mcVersion:4.3.1")
     modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:1.0.2-rc1+1.20")
-    modImplementation("io.wispforest:owo-lib:0.11.2+1.20")
-    modImplementation("maven.modrinth:iris:1.6.11+1.20.2")
+    modImplementation("io.wispforest:owo-lib:0.12.5+1.20.3")
+    modImplementation("maven.modrinth:iris:1.6.17+1.20.4")
 }
 
 loom {

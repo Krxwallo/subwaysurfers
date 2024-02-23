@@ -95,7 +95,7 @@ public abstract class StructureTemplateMixin implements ClientStructureTemplate 
                     }
                 }
 
-                world.addEntity(world.random.nextInt(), entity);
+                world.addEntity(entity);
                 entity.streamSelfAndPassengers().forEach(world::spawnEntity);
             });
         }
