@@ -56,6 +56,10 @@ class TrainEntity(type: EntityType<out AnimalEntity>, level: World) : AnimalEnti
         shouldDrive = nbtCompound.getBoolean("shouldDrive")
     }
 
+    override fun getBodyYaw(): Float = 180f
+    override fun getHeadYaw(): Float = 180f
+    override fun getYaw(): Float = 180f
+
     companion object {
         private val DRIVE: TrackedData<Boolean> =
             DataTracker.registerData(TrainEntity::class.java, TrackedDataHandlerRegistry.BOOLEAN)
