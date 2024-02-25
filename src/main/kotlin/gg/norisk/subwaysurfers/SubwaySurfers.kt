@@ -16,13 +16,14 @@ import gg.norisk.subwaysurfers.server.mechanics.SpeedManager
 import gg.norisk.subwaysurfers.worldgen.RailWorldManager
 import gg.norisk.subwaysurfers.worldgen.StructureManager
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.util.Identifier
 import net.silkmc.silk.commands.clientCommand
 import org.slf4j.LoggerFactory
 
-object SubwaySurfers : ModInitializer, ClientModInitializer {
+object SubwaySurfers : ModInitializer, ClientModInitializer, DedicatedServerModInitializer {
     override fun onInitialize() {
         EntityRegistry.registerEntityAttributes()
         SoundRegistry.init()
@@ -31,7 +32,6 @@ object SubwaySurfers : ModInitializer, ClientModInitializer {
         RailWorldManager.init()
         StartCommand.init()
         MovementInputListener.init()
-        SpeedManager.init()
         PatternManager.init()
         NetworkRegistry.init()
     }
@@ -64,5 +64,9 @@ object SubwaySurfers : ModInitializer, ClientModInitializer {
                 }
             }
         }
+    }
+
+    override fun onInitializeServer() {
+        SpeedManager.init()
     }
 }

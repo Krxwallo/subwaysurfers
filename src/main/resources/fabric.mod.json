@@ -21,6 +21,12 @@
         "value": "gg.norisk.subwaysurfers.SubwaySurfers"
       }
     ],
+    "server": [
+      {
+        "adapter": "kotlin",
+        "value": "gg.norisk.subwaysurfers.SubwaySurfers"
+      }
+    ],
     "client": [
       {
         "adapter": "kotlin",

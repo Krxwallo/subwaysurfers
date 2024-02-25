@@ -6,8 +6,7 @@
   "mixins": [
     "entity.EntityDimensionsMixin",
     "entity.LivingEntityMixin",
-    "entity.player.PlayerEntityMixin",
-    "structure.StructureTemplateMixin"
+    "entity.player.PlayerEntityMixin"
   ],
   "client": [
     "client.IrisMixin",
@@ -20,7 +19,8 @@
     "client.render.CameraMixin",
     "client.render.GameRendererMixin",
     "client.render.WorldRendererMixin",
-    "client.render.entity.PlayerEntityRendererMixin"
+    "client.render.entity.PlayerEntityRendererMixin",
+    "client.structure.StructureTemplateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

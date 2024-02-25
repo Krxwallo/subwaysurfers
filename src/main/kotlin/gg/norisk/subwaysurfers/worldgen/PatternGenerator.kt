@@ -6,35 +6,34 @@ import net.minecraft.structure.StructurePlacementData
 import net.minecraft.structure.StructureTemplate
 import net.minecraft.util.BlockMirror
 import net.minecraft.util.math.BlockPos
+import java.util.*
 
 class PatternGenerator(
     val startPos: BlockPos,
-    var mirror: BlockMirror = BlockMirror.NONE,
-    val patternProvider: () -> MutableList<String>
+    var patternStack: Stack<Stack<String>>,
+    var mirror: BlockMirror = BlockMirror.NONE
 ) {
     var nextZ = startPos.z
-    var currentPattern = patternProvider.invoke()
-    var nextStructure: StructureTemplate? = StructureManager.readOrLoadTemplate(currentPattern.removeFirstOrNull())
-
-    fun handleNewPattern(player: ClientPlayerEntity) {
-        nextZ = player.z.toInt()
-    }
+    var currentPatternStack: Stack<String> = patternStack.pop()
+    var nextStructure: StructureTemplate? = StructureManager.readOrLoadTemplate(currentPatternStack.pop())
 
     //TODO erstmal aktuelles Pattern ablaufen lassen bevor wir neu handlen.
 
     private fun handleNextStructure(): StructureTemplate? {
-        return StructureManager.readOrLoadTemplate(
-            if (currentPattern.isNotEmpty()) {
-                currentPattern.removeFirst()
-            } else {
-                currentPattern = patternProvider.invoke()
-                currentPattern.removeFirstOrNull()
+        if (currentPatternStack.isNotEmpty()) {
+            return StructureManager.readOrLoadTemplate(currentPatternStack.pop())
+        } else {
+            if (patternStack.isNotEmpty()) {
+                currentPatternStack = patternStack.pop()
+                return handleNextStructure()
             }
-        )
+            return null
+        }
     }
 
     fun tick(player: ClientPlayerEntity) {
         if (nextStructure == null) {
+            //TODO maybe hier z resetten?
             nextStructure = handleNextStructure()
             return
         }
@@ -57,7 +56,7 @@ class PatternGenerator(
             nextStructure = handleNextStructure()
 
             if (nextStructure != null) {
-                nextZ += (nextStructure?.size?.z ?: 0) + 2
+                nextZ += (nextStructure?.size?.z ?: 0)
             }
         }
     }

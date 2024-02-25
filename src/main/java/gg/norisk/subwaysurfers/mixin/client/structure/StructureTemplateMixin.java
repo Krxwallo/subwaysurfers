@@ -1,4 +1,4 @@
-package gg.norisk.subwaysurfers.mixin.structure;
+package gg.norisk.subwaysurfers.mixin.client.structure;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;

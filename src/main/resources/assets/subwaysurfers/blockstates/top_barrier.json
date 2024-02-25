@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "subwaysurfers:block/top_barrier"
+    },
+    "facing=east": {
+      "model": "subwaysurfers:block/top_barrier",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "subwaysurfers:block/top_barrier",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "subwaysurfers:block/top_barrier",
+      "y": 270
     }
   }
 }

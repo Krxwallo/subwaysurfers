@@ -1,12 +1,15 @@
 package gg.norisk.subwaysurfers.worldgen.pattern
 
 val leftWallPattern = listOf(
-    "plains_small_house_1",
-    "plains_small_house_2",
-    "plains_small_house_3",
-    "plains_small_house_4",
-    "plains_small_house_5",
-    "plains_small_house_6",
-    "plains_small_house_7",
-    "plains_small_house_8",
+    "subway_house_1",
+    "subway_house_2",
+    "subway_house_3",
+    "subway_house_4",
+    "subway_house_5",
+    "subway_house_6",
+    "subway_house_7",
+    "subway_house_8",
+    "subway_house_9",
+    "subway_house_10",
+    "subway_house_11",
 )

@@ -1,6 +1,7 @@
 package gg.norisk.subwaysurfers.client
 
 import gg.norisk.subwaysurfers.client.lifecycle.ClientGameStartLifeCycle
+import gg.norisk.subwaysurfers.extensions.toStack
 import gg.norisk.subwaysurfers.network.s2c.VisualClientSettings
 import gg.norisk.subwaysurfers.network.s2c.patternPacketS2C
 import gg.norisk.subwaysurfers.network.s2c.visualClientSettingsS2C
@@ -22,8 +23,9 @@ object ClientSettings : ClientTickEvents.EndTick {
         patternPacketS2C.receiveOnClient { packet, context ->
             val player = MinecraftClient.getInstance().player ?: return@receiveOnClient
             settings.patternPacket = packet
-            ClientGameStartLifeCycle.leftWallPatternGenerator?.handleNewPattern(player)
-            ClientGameStartLifeCycle.rightWallPatternGenerator?.handleNewPattern(player)
+            ClientGameStartLifeCycle.leftWallPatternGenerator?.patternStack?.add(getLeftPattern().toStack())
+            ClientGameStartLifeCycle.railPatternGenerator?.patternStack?.add(getMiddlePattern().toStack())
+            ClientGameStartLifeCycle.rightWallPatternGenerator?.patternStack?.add(getRightPattern().toStack())
         }
 
         visualClientSettingsS2C.receiveOnClient { packet, context ->
@@ -54,15 +56,15 @@ object ClientSettings : ClientTickEvents.EndTick {
     }
 
     fun getLeftPattern(): List<String> {
-       return settings.patternPacket.left
+        return settings.patternPacket.left
     }
 
     fun getMiddlePattern(): List<String> {
-        return settings.patternPacket.left
+        return settings.patternPacket.middle
     }
 
     fun getRightPattern(): List<String> {
-        return settings.patternPacket.left
+        return settings.patternPacket.right
     }
 
     fun onToggle(player: ClientPlayerEntity) {

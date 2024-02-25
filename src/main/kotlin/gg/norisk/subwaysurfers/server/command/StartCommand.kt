@@ -2,11 +2,14 @@ package gg.norisk.subwaysurfers.server.command
 
 import com.mojang.brigadier.context.CommandContext
 import gg.norisk.subwaysurfers.entity.UUIDMarker
-import gg.norisk.subwaysurfers.network.s2c.*
+import gg.norisk.subwaysurfers.network.s2c.PatternPacket
+import gg.norisk.subwaysurfers.network.s2c.VisualClientSettings
+import gg.norisk.subwaysurfers.network.s2c.gameOverScreenS2C
+import gg.norisk.subwaysurfers.network.s2c.visualClientSettingsS2C
+import gg.norisk.subwaysurfers.server.mechanics.PatternManager
 import gg.norisk.subwaysurfers.server.mechanics.SpeedManager
 import gg.norisk.subwaysurfers.subwaysurfers.*
 import gg.norisk.subwaysurfers.worldgen.RailWorldManager
-import gg.norisk.subwaysurfers.worldgen.pattern.leftWallPattern
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
@@ -91,7 +94,9 @@ object StartCommand {
             )
 
             settings.patternPacket = PatternPacket(
-                leftWallPattern, emptyList(), leftWallPattern
+                PatternManager.currentPattern.left,
+                PatternManager.currentPattern.middle,
+                PatternManager.currentPattern.right
             )
 
             player.teleport(player.serverWorld, centerPos.x, topY.toDouble(), centerPos.z, 0f, 0f)

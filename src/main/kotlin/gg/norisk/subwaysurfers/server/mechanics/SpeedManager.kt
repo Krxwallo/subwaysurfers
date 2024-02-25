@@ -17,7 +17,7 @@ object SpeedManager {
 
     @OptIn(ExperimentalSilkApi::class)
     fun init() {
-        Events.Server.preStart.listen { evt ->
+        Events.Server.postStart.listen { evt ->
             val server = evt.server
 
             // Increase speed for players
