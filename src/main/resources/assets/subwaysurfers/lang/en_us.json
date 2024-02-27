@@ -2,5 +2,6 @@
   "itemGroup.subwaysurfers.subwaysurfers_utils": "SubwaySurfer Utils",
   "block.subwaysurfers.bottom_barrier": "Bottom Barrier",
   "block.subwaysurfers.top_barrier": "Top Barrier",
-  "block.subwaysurfers.subway_rail": "Rail"
+  "block.subwaysurfers.subway_rail": "Rail",
+  "item.subwaysurfers.hoverboard": "Hoverboard"
 }

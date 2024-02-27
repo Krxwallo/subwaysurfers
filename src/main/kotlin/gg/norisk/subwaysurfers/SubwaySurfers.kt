@@ -19,8 +19,10 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.DedicatedServerModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.entity.EquipmentSlot
 import net.minecraft.util.Identifier
 import net.silkmc.silk.commands.clientCommand
+import net.silkmc.silk.commands.command
 import org.slf4j.LoggerFactory
 
 object SubwaySurfers : ModInitializer, ClientModInitializer, DedicatedServerModInitializer {
@@ -34,6 +36,7 @@ object SubwaySurfers : ModInitializer, ClientModInitializer, DedicatedServerModI
         MovementInputListener.init()
         PatternManager.init()
         NetworkRegistry.init()
+        serverDevCommands()
     }
 
     override fun onInitializeClient() {
@@ -55,6 +58,17 @@ object SubwaySurfers : ModInitializer, ClientModInitializer, DedicatedServerModI
     val noriskSkin = "textures/norisk_skin.png".toId()
     val policeSkin = "textures/policeman.png".toId()
     val logger = LoggerFactory.getLogger("subwaysurfers")
+
+    private fun serverDevCommands() {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            command("head") {
+                runs {
+                    val player = this.source.playerOrThrow
+                    player.equipStack(EquipmentSlot.HEAD, player.mainHandStack)
+                }
+            }
+        }
+    }
 
     private fun devCommands() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment) {
